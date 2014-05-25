@@ -154,3 +154,111 @@ public abstract class Vehicle {
 			this.queued = false;
 		}
 	}
+	
+	/**
+	 * Simple getter for the arrival time 
+	 * @return the arrivalTime
+	 */
+	public int getArrivalTime() {
+		
+		return this.arrivalTime;
+	}
+	
+	/**
+	 * Simple getter for the departure time from the car park
+	 * Note: result may be 0 before parking, show intended departure 
+	 * time while parked; and actual when archived
+	 * @return the departureTime
+	 */
+	public int getDepartureTime() {
+		
+		int departTime = this.intendedDuration + this.parkingTime;
+		if (this.isParked() == true) {
+			departTime = this.intendedDuration;
+			return departTime;
+		}
+		else {
+			return this.departureTime;
+		}
+		
+	}
+	
+	/**
+	 * Simple getter for the parking time
+	 * Note: result may be 0 before parking
+	 * @return the parkingTime
+	 */
+	public int getParkingTime() {
+		return this.parkingTime;
+	}
+
+	/**
+	 * Simple getter for the vehicle ID
+	 * @return the vehID
+	 */
+	public String getVehID(){
+		return this.vehID;
+	}
+
+	/**
+	 * Boolean status indicating whether vehicle is currently parked 
+	 * @return true if the vehicle is in a parked state; false otherwise
+	 */
+	public boolean isParked() {
+		return this.parked;
+		
+	}
+
+	/**
+	 * Boolean status indicating whether vehicle is currently queued
+	 * @return true if vehicle is in a queued state, false otherwise 
+	 */
+	public boolean isQueued() {
+		return this.queued;
+	}
+	
+	/**
+	 * Boolean status indicating whether customer is satisfied or not
+	 * Satisfied if they park; dissatisfied if turned away, or queuing for too long 
+	 * Note that calls to this method may not reflect final status 
+	 * @return true if satisfied, false if never in parked state or if queuing time exceeds max allowable 
+	 */
+	public boolean isSatisfied() {
+		return this.satisfied;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "";
+	}
+
+	/**
+	 * Boolean status indicating whether vehicle was ever parked
+	 * Will return false for vehicles in queue or turned away 
+	 * @return true if vehicle was or is in a parked state, false otherwise 
+	 */
+	public boolean wasParked() {
+		if (this.parked == true) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Boolean status indicating whether vehicle was ever queued
+	 * @return true if vehicle was or is in a queued state, false otherwise 
+	 */
+	public boolean wasQueued() {
+		if (this.queued == true){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+}
