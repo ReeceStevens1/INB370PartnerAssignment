@@ -40,11 +40,10 @@ public class CarParkTests {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	
-	private ArrayList<Vehicle> parked;
-	private Queue<Vehicle> queued;
-	private LinkedList<Vehicle> archived;
 	private CarPark cp;
+	public ArrayList<Vehicle> parked;
+	public ArrayList<Vehicle> queued;
+	public ArrayList<Vehicle> archived;
 	private Vehicle car1;
 	private Vehicle car2;
 	private Vehicle car3;
@@ -66,6 +65,9 @@ public class CarParkTests {
 	public void setUp() throws Exception {
 		CarPark cp = new CarPark(Constants.DEFAULT_MAX_CAR_SPACES,Constants.DEFAULT_MAX_SMALL_CAR_SPACES,Constants.DEFAULT_MAX_MOTORCYCLE_SPACES,Constants.DEFAULT_MAX_QUEUE_SIZE);
 		this.cp = cp;
+		parked = new ArrayList<Vehicle>();
+		queued = new ArrayList<Vehicle>();
+		archived = new ArrayList<Vehicle>();
 		this.car1 = new Car("abc" , 80, true);	
 		this.car2 = new Car("def" , 90, true);
 		this.car3 = new Car("ghi" , 100, true);	
@@ -113,6 +115,7 @@ public class CarParkTests {
 	 */
 	@Test 
 	public void testArchiveNewVehicle() throws SimulationException {
+		archived.clear();
 		cp.archiveNewVehicle(car3);
 		assertTrue(archived.size() == 1);
 	}
@@ -124,10 +127,14 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testArchiveQueueFailures() throws VehicleException, SimulationException {
-		cp.parkVehicle(car1, 10, 50);
+		/*cp.parkVehicle(car1, 10, 50);
 		cp.unparkVehicle(car1, 60);
 		cp.archiveDepartingVehicles(60, true);
-		assertTrue(cp.carParkEmpty() == true);
+		assertTrue(cp.carParkEmpty() == true);*/
+		cp.enterQueue(car8);
+		cp.archiveQueueFailures(180);
+		assertTrue(this.archived.size() == 1);
+		
 	}
 
 	/**
@@ -168,7 +175,7 @@ public class CarParkTests {
 	@Test
 	public void testEnterQueue() throws SimulationException, VehicleException {
 		cp.enterQueue(car7);
-		if (this.queued.peek == null)
+		assertTrue(cp.queueEmpty() == false);
 	}
 
 	/**
@@ -291,7 +298,6 @@ public class CarParkTests {
 		cp.enterQueue(mc3);
 		cp.enterQueue(mc4);
 		cp.enterQueue(mc5);
-		
 		assertTrue(cp.queueFull() == true);
 	}
 
