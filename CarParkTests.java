@@ -62,7 +62,7 @@ public class CarParkTests {
 	public void setUp() throws Exception {
 		CarPark cp = new CarPark(Constants.DEFAULT_MAX_CAR_SPACES,Constants.DEFAULT_MAX_SMALL_CAR_SPACES,Constants.DEFAULT_MAX_MOTORCYCLE_SPACES,Constants.DEFAULT_MAX_QUEUE_SIZE);
 		this.cp = cp;
-		this.car1 = new Car("abc" , 80, true);	
+		this.car1 = new Car("abc" , 79, true);	
 		this.car2 = new Car("def" , 90, true);
 		this.car3 = new Car("ghi" , 100, true);	
 		this.car4 = new Car("jkk" , 110, false);	
@@ -88,6 +88,9 @@ public class CarParkTests {
 	@After
 	public void tearDown() throws Exception {
 		this.cp = new CarPark(Constants.DEFAULT_MAX_CAR_SPACES,Constants.DEFAULT_MAX_SMALL_CAR_SPACES,Constants.DEFAULT_MAX_MOTORCYCLE_SPACES,Constants.DEFAULT_MAX_QUEUE_SIZE);
+		cp.spaces.clear();
+		cp.queue.clear();
+		cp.past.clear();
 	}
 
 	/**
@@ -174,10 +177,14 @@ public class CarParkTests {
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#exitQueue(asgn2Vehicles.Vehicle, int)}.
+	 * @throws VehicleException 
+	 * @throws SimulationException 
 	 */
 	@Test
-	public void testExitQueue() {
-		fail("Not yet implemented"); // TODO
+	public void testExitQueue() throws SimulationException, VehicleException {
+		cp.enterQueue(car1);
+		cp.exitQueue(car1, 120);
+		assertTrue(cp.queueEmpty() == true);
 	}
 
 	/**
@@ -266,11 +273,15 @@ public class CarParkTests {
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#processQueue(int, asgn2Simulators.Simulator)}.
+	 * @throws VehicleException 
+	 * @throws SimulationException 
 	 */
 	@Test
-	public void testProcessQueue() {
+	public void testProcessQueue() throws SimulationException, VehicleException {
 		cp.enterQueue(car1);
-		cp.
+		
+		cp.processQueue(80, null);
+		assertTrue(cp.spaces.contains(car1) == true);
 	}
 
 	/**
@@ -333,7 +344,7 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testTryProcessNewVehicles() {
-		fail("Not yet implemented"); // TODO
+		cp.tryProcessNewVehicles(30, sim);
 	}
 
 	/**
