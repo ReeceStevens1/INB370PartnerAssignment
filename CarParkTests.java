@@ -95,13 +95,14 @@ public class CarParkTests {
 	 * @throws SimulationException 
 	 * @throws VehicleException 
 	 */
+	
 	@Test
-	public void testArchiveDepartingVehicles() throws VehicleException, SimulationException {
-		cp.parkVehicle(car2, 10,60);
-		cp.archiveDepartingVehicles(80, false);
-		assertTrue(cp.past.contains(car2) == true);
-		
-	}
+	 public void testArchiveDepartingVehicles() throws VehicleException, SimulationException {
+	  cp.parkVehicle(car2, 10,60);
+	  cp.archiveDepartingVehicles(60, false);
+	  assertTrue(cp.past.contains(car2) == true);
+	  
+	 }
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#archiveNewVehicle(asgn2Vehicles.Vehicle)}.
@@ -241,10 +242,15 @@ public class CarParkTests {
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#numVehiclesInQueue()}.
+	 * @throws VehicleException 
+	 * @throws SimulationException 
 	 */
 	@Test
-	public void testNumVehiclesInQueue() {
-		fail("Not yet implemented"); // TODO
+	public void testNumVehiclesInQueue() throws SimulationException, VehicleException {
+		cp.enterQueue(car1);
+		cp.enterQueue(car2);
+		cp.enterQueue(car3);
+		assertTrue(cp.queue.size() == 3);
 	}
 
 	/**
@@ -263,7 +269,8 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testProcessQueue() {
-		fail("Not yet implemented"); // TODO
+		cp.enterQueue(car1);
+		cp.
 	}
 
 	/**
