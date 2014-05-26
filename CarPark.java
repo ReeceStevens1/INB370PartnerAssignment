@@ -139,7 +139,7 @@ public class CarPark {
 	 * @return true if car park empty, false otherwise
 	 */
 	public boolean carParkEmpty() {
-		if (this.spaces.isEmpty()) {
+		if (this.spaces.size() <= 0) {
 			return true;
 		}
 		else {
@@ -152,7 +152,7 @@ public class CarPark {
 	 * @return true if car park full, false otherwise
 	 */
 	public boolean carParkFull() {
-		if (this.spaces.toArray().length >= this.maxCarSpaces){
+		if (this.spaces.size() >= this.maxCarSpaces + this.maxSmallCarSpaces + this.maxMotorCycleSpaces){
 			return true;
 		}
 		else {
@@ -169,7 +169,7 @@ public class CarPark {
 	 * @throws VehicleException if vehicle not in the correct state 
 	 */
 	public void enterQueue(Vehicle v) throws SimulationException, VehicleException {
-		if (queueFull()) {
+		if (this.queueFull()) {
 			throw new SimulationException("The queue is full");
 		}
 		else if (v.isParked()) {
@@ -194,9 +194,6 @@ public class CarPark {
 	public void exitQueue(Vehicle v,int exitTime) throws SimulationException, VehicleException {
 		if (v.isQueued() == false) {
 			throw new SimulationException("The vehicle is not in the queue");
-		}
-		else if (exitTime > Constants.MAXIMUM_QUEUE_TIME) {
-			throw new VehicleException("The vehicle is not in the queue or has incorrect timing");
 		}
 		else {
 			v.exitQueuedState(exitTime);
@@ -348,8 +345,9 @@ public class CarPark {
 			throw new VehicleException("The vehicle is not in the right state to be parked or has incorrect timing");
 		}
 		else {
-			v.enterParkedState(time, intendedDuration);
 			this.spaces.add(v);
+			v.enterParkedState(time, intendedDuration);
+			
 		}
 	}
 
@@ -363,7 +361,7 @@ public class CarPark {
 	 */
 	public void processQueue(int time, Simulator sim) throws VehicleException, SimulationException {
 		for(int i=0;i<queue.size();i++) {
-			Vehicle v = queue.peek();
+			Vehicle v = queue.get(i);
 			if(!spacesAvailable(v)) {
 				throw new SimulationException("There are no suitable spaces for parking.");
 			}
@@ -382,7 +380,7 @@ public class CarPark {
 	 * @return true if queue empty, false otherwise
 	 */
 	public boolean queueEmpty() {
-		if (this.queue.size() == 0) {
+		if (this.queue.size() <= 0) {
 			return true;
 		}
 		else{
