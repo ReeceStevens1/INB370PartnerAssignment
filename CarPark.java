@@ -12,8 +12,6 @@ package asgn2CarParks;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import asgn2Exceptions.SimulationException;
 import asgn2Exceptions.VehicleException;
@@ -48,9 +46,9 @@ public class CarPark {
 	public CarPark c;
 	private int maxCarSpaces, maxSmallCarSpaces, maxMotorCycleSpaces, maxQueueSize;
 	private int count;
-	private ArrayList<Vehicle> spaces = new ArrayList<Vehicle>();
-	private ArrayList<Vehicle> queue = new ArrayList<Vehicle>();
-	private ArrayList<Vehicle> past = new ArrayList<Vehicle>();
+	public ArrayList<Vehicle> spaces;
+	public ArrayList<Vehicle> queue;
+	public ArrayList<Vehicle> past;
 	private int numDissatisfied = 0;
 	private String status;
 	
@@ -72,6 +70,9 @@ public class CarPark {
 		this.maxSmallCarSpaces = maxSmallCarSpaces;
 		this.maxMotorCycleSpaces = maxMotorCycleSpaces;
 		this.maxQueueSize = maxQueueSize;
+		spaces = new ArrayList<Vehicle>();
+		queue = new ArrayList<Vehicle>();
+		past = new ArrayList<Vehicle>();
 		
 	}
 
@@ -408,7 +409,7 @@ public class CarPark {
 	 * @return true if space available for v, false otherwise 
 	 */
 	public boolean spacesAvailable(Vehicle v) {
-		if (carParkFull() == true) {
+		if (this.carParkFull() == true) {
 			return false;
 		}
 		else if(v instanceof Car) {
@@ -437,7 +438,7 @@ public class CarPark {
 		else {
 			return false;
 		}
-		return false;
+		return true;
 	}
 
 
