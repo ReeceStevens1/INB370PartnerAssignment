@@ -12,12 +12,10 @@ package asgn2Tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Exceptions.VehicleException;
-import asgn2Vehicles.Car;
 import asgn2Vehicles.MotorCycle;
 
 /**
@@ -39,11 +37,8 @@ public class MotorCycleTests {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	
+
 	@Test
 	public void VehIDTest(){
 		assertTrue(m.getVehID() == "bac");
@@ -66,6 +61,12 @@ public class MotorCycleTests {
 	MotorCycle h = new MotorCycle("ghj" , 80);	
 	assertFalse(h.getArrivalTime() == 50);	
 	}
+	
+	@Test (expected = VehicleException.class)
+	public void AddNewMotorCycleException() throws VehicleException{
+	MotorCycle h = new MotorCycle("ghj" , -80);	
+	}
+	
 	@Test
 	public void NewMotorCycleVehIDTest() throws VehicleException{
 	MotorCycle h = new MotorCycle("ghj", 80);

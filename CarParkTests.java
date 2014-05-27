@@ -101,11 +101,18 @@ public class CarParkTests {
 	
 	@Test
 	 public void testArchiveDepartingVehicles() throws VehicleException, SimulationException {
-	  cp.parkVehicle(car2, 10,60);
-	  cp.archiveDepartingVehicles(60, false);
+	  cp.parkVehicle(car2, 90,30);
+	  cp.archiveDepartingVehicles(120, false);
 	  assertTrue(cp.past.contains(car2) == true);
-	  
 	 }
+	
+	@Test
+	public void testArchiveDepartingVehiclesFalse() throws VehicleException, SimulationException{
+	 cp.parkVehicle(car2, 90, 30);
+	 assertTrue(cp.past.contains(car2) == false);		
+	}
+	
+	
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#archiveNewVehicle(asgn2Vehicles.Vehicle)}.
@@ -116,6 +123,12 @@ public class CarParkTests {
 		cp.archiveNewVehicle(car3);
 		assertTrue(cp.past.size() == 1);
 	}
+	
+	@Test (expected = SimulationException.class)
+	public void testArchiveNewVehicleException() throws SimulationException, VehicleException {
+		car3.enterParkedState(10, 30);
+		cp.archiveNewVehicle(car3);	
+	}
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#archiveQueueFailures(int)}.
@@ -124,14 +137,9 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testArchiveQueueFailures() throws VehicleException, SimulationException {
-		/*cp.parkVehicle(car1, 10, 50);
-		cp.unparkVehicle(car1, 60);
-		cp.archiveDepartingVehicles(60, true);
-		assertTrue(cp.carParkEmpty() == true);*/
 		cp.enterQueue(car8);
 		cp.archiveQueueFailures(180);
 		assertTrue(cp.past.size() == 1);
-		
 	}
 
 	/**
@@ -163,7 +171,16 @@ public class CarParkTests {
 		cp.parkVehicle(car3, 10, 40);
 		assertTrue(cp.carParkFull() == true);
 	}
-
+	
+	@Test (expected = SimulationException.class)
+	public void testCarParkFullException() throws SimulationException, VehicleException{
+		this.cp = new CarPark(0,3,0,Constants.DEFAULT_MAX_QUEUE_SIZE);
+		cp.parkVehicle(car1, 10, 40);
+		cp.parkVehicle(car2, 10, 40);
+		cp.parkVehicle(car3, 10, 40);
+		cp.parkVehicle(car4, 10, 40);
+	}
+	
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#enterQueue(asgn2Vehicles.Vehicle)}.
 	 * @throws VehicleException 
@@ -174,12 +191,19 @@ public class CarParkTests {
 		cp.enterQueue(car7);
 		assertTrue(cp.queueEmpty() == false);
 	}
+	
+	@Test (expected = VehicleException.class)
+	public void testEnterQueueException() throws SimulationException, VehicleException {
+		cp.parkVehicle(car7, 10, 20);
+		cp.enterQueue(car7);
+	}
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#exitQueue(asgn2Vehicles.Vehicle, int)}.
 	 * @throws VehicleException 
 	 * @throws SimulationException 
 	 */
+	
 	@Test
 	public void testExitQueue() throws SimulationException, VehicleException {
 		cp.enterQueue(car1);
@@ -187,13 +211,11 @@ public class CarParkTests {
 		assertTrue(cp.queueEmpty() == true);
 	}
 
-	/**
-	 * Test method for {@link asgn2CarParks.CarPark#finalState()}.
-	 */
-	@Test
-	public void testFinalState() {
-		fail("Not yet implemented"); // TODO
+	@Test (expected = SimulationException.class)
+	public void testExitQueueException() throws SimulationException, VehicleException{
+		cp.exitQueue(car1, 10);		
 	}
+	
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#getNumCars()}.
@@ -209,6 +231,7 @@ public class CarParkTests {
 		cp.parkVehicle(car5, 10, 40);
 		assertTrue(cp.getNumCars() == 5);
 	}
+	
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#getNumMotorCycles()}.
@@ -241,10 +264,7 @@ public class CarParkTests {
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#getStatus(int)}.
 	 */
-	@Test
-	public void testGetStatus() {
-		fail("Not yet implemented"); // TODO
-	}
+	
 
 
 	/**
@@ -278,9 +298,14 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testProcessQueue() throws SimulationException, VehicleException {
-		cp.enterQueue(car1);
-		
-		cp.processQueue(80, null);
+		this.cp = new CarPark(4,0,0,Constants.DEFAULT_MAX_QUEUE_SIZE);
+		cp.enterQueue(car8);
+		cp.parkVehicle(car6, 0, 30);
+		cp.parkVehicle(car7, 0, 30);
+		cp.parkVehicle(car4, 0, 15);
+		cp.parkVehicle(car5, 0, 30);
+		cp.unparkVehicle(car4, 15);
+		cp.processQueue(20, sim);
 		assertTrue(cp.spaces.contains(car1) == true);
 	}
 
@@ -334,19 +359,16 @@ public class CarParkTests {
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#toString()}.
 	 */
-	@Test
-	public void testToString() {
-		fail("Not yet implemented"); // TODO
-	}
+	
 
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#tryProcessNewVehicles(int, asgn2Simulators.Simulator)}.
 	 */
-	@Test
+/*	@Test
 	public void testTryProcessNewVehicles() {
 		cp.tryProcessNewVehicles(30, sim);
 	}
-
+*/
 	/**
 	 * Test method for {@link asgn2CarParks.CarPark#unparkVehicle(asgn2Vehicles.Vehicle, int)}.
 	 * @throws VehicleException 
@@ -359,5 +381,6 @@ public class CarParkTests {
 		assertTrue(cp.carParkEmpty() == true);
 		
 	}
+	
 
 }

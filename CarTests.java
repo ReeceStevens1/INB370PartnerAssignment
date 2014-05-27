@@ -12,18 +12,16 @@ package asgn2Tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Exceptions.SimulationException;
 import asgn2Exceptions.VehicleException;
 import asgn2Vehicles.Car;
-import asgn2Vehicles.Vehicle;
 
 
 /**
- * @author hogan
+ *
  *
  */
 public class CarTests {
@@ -38,16 +36,12 @@ public class CarTests {
 	public void setUp() throws Exception {
 	Car c = new Car("abc" , 80, true);	
 	this.c = c;	
-
-	
 	}
 
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@After
-	public void tearDown() throws Exception {
-	}
+	
 
 	/**
 	 * Test method for {@link asgn2Vehicles.Car#toString()}.
@@ -71,7 +65,6 @@ public class CarTests {
 	@Test
 	public void VehIDTest(){
 	assertTrue(c.getVehID() == "abc");	
-		
 	}
 	@Test
 	public void VehIDTestDifferentOrder(){
@@ -92,6 +85,11 @@ public class CarTests {
 	public void AddingNewCar() throws VehicleException{
 	Car a = new Car("cad" , 90, false);	
 	assertTrue(a.getArrivalTime() == 90);	
+	}
+	
+	@Test (expected = VehicleException.class)
+	public void AddingNewCarException() throws VehicleException{
+	Car a = new Car("cad", -90, false);
 	}
 	
 	@Test
@@ -119,6 +117,11 @@ public class CarTests {
 	assertTrue(c.isParked() == true);
 	}
 	
+	@Test (expected = VehicleException.class)
+	public void TestCarStateParkedException() throws VehicleException {
+		this.c.exitParkedState(30);	
+	}
+	
 	@Test
 	public void TestCarStateQueuedFalse() throws VehicleException{
 	this.c.enterQueuedState();
@@ -131,6 +134,11 @@ public class CarTests {
 	public void TestCarStateQueuedTrue() throws VehicleException{
 	this.c.enterQueuedState();
 	assertTrue(c.isQueued() == true);
+	}
+	
+	@Test (expected = VehicleException.class)
+	public void TestCarStateQueuedException() throws VehicleException{
+		this.c.exitQueuedState(10);
 	}
 	
 	@Test
@@ -176,11 +184,12 @@ public class CarTests {
 		Car u = new Car("old", 100, false);
 		u.enterParkedState(100, 20);
 		u.exitParkedState(120);
-		assertTrue(u.getDepartureTime() == 120);
-		
-		
-		
+		assertTrue(u.getDepartureTime() == 120);		
 	}
-	
+	@Test (expected = VehicleException.class)
+	public void TestParkedStateException() throws VehicleException{
+		Car i = new Car("kmn", 200, false);
+		i.exitParkedState(10);
+	}
 	
 }
