@@ -55,12 +55,14 @@ public abstract class Vehicle {
 	public Vehicle v;
 	private String vehID;
 	private int arrivalTime;
-	private int intendedDuration = 0;
+	private int intendedDuration;
 	private int parkingTime;
 	private int departureTime;
 	private boolean parked = false;
 	private boolean queued = false;
 	private boolean satisfied = false;
+	private boolean wasQueued = false;
+	private boolean wasParked = false;
 	
 	public Vehicle(String vehID, int arrivalTime) throws VehicleException  {
 		if (arrivalTime <= 0) {
@@ -97,6 +99,7 @@ public abstract class Vehicle {
 			this.parked = true;
 			this.intendedDuration = intendedDuration;
 			this.parkingTime = parkingTime;
+			
 		}
 		
 	}
@@ -136,6 +139,8 @@ public abstract class Vehicle {
 		else {
 			this.departureTime = departureTime;
 			this.parked = false;
+			this.wasParked = true;
+			this.satisfied = true;
 		}
 	}
 
@@ -156,6 +161,7 @@ public abstract class Vehicle {
 		}
 		else {
 			this.queued = false;
+			this.wasQueued = true;
 		}
 	}
 	
@@ -235,9 +241,52 @@ public abstract class Vehicle {
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
-		return "";
-	}
+	 public String toString() {
+	  String vehicleInfo = "Vehicle vehID: " + this.vehID
+	  + "\nArrival Time: " + this.arrivalTime;
+	  
+	  if(this.wasQueued() == true)
+	  {
+		  vehicleInfo += "\nExit from Queue: " + this.parkingTime;
+		  vehicleInfo += "\nQueuing Time: " + (this.arrivalTime - this.parkingTime);
+	  }
+	  else
+	  {
+		  vehicleInfo += "\nVehicle was not queued";
+	  }
+	  
+	  if(this.wasParked() == true)
+	  {
+		  vehicleInfo += "\nEntry to Car Park: " + this.parkingTime
+		  +"\nExit from Car Park: " + this.departureTime
+	      +"\nParking Time: " + (this.departureTime - this.parkingTime);
+	  }
+	  else
+	  {
+		  vehicleInfo += "\nVehicle was not parked";
+	  }
+	  
+	  if(this.isSatisfied() == true)
+	  {
+		  vehicleInfo += "\nCustomer was satisfied";
+	  }
+	  else
+	  {
+		  vehicleInfo += "\nCustomer was not satisfied";
+	  }
+	  if(this instanceof Car)
+	  {
+		  if(((Car) this).isSmall())
+		  {
+			  vehicleInfo += "\nCar can use small car parking space";
+		  }
+		  else
+		  {
+			  vehicleInfo += "\nCar cannot use small parking space\n";
+		  }
+	  }
+	  return vehicleInfo;
+	 }
 
 	/**
 	 * Boolean status indicating whether vehicle was ever parked
@@ -245,12 +294,7 @@ public abstract class Vehicle {
 	 * @return true if vehicle was or is in a parked state, false otherwise 
 	 */
 	public boolean wasParked() {
-		if (this.parked == true) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return this.wasParked;
 	}
 
 	/**
@@ -258,11 +302,6 @@ public abstract class Vehicle {
 	 * @return true if vehicle was or is in a queued state, false otherwise 
 	 */
 	public boolean wasQueued() {
-		if (this.queued == true){
-			return true;
-		}
-		else{
-			return false;
-		}
+		return this.wasQueued;
 	}
 }
