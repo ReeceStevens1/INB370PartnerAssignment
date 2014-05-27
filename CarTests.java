@@ -52,11 +52,7 @@ public class CarTests {
 	/**
 	 * Test method for {@link asgn2Vehicles.Car#toString()}.
 	 */
-	@Test
-	public void testToString() {
-		fail("Not yet implemented"); // TODO
-	}
-
+	
 	/**
 	 * Test method for {@link asgn2Vehicles.Car#Car(java.lang.String, int, boolean)}.
 	 */
@@ -85,57 +81,106 @@ public class CarTests {
 	@Test
 	public void ArrivalTimeTest(){
 	assertTrue(c.getArrivalTime() == 80);	
-		
 	}
+	
 	@Test 
 	public void WrongArrivalTimeTest(){
 	assertFalse(c.getArrivalTime() == 70);
-		
 	}
+	
 	@Test
 	public void AddingNewCar() throws VehicleException{
 	Car a = new Car("cad" , 90, false);	
-	assertTrue(a.getArrivalTime() == 90);
-		
+	assertTrue(a.getArrivalTime() == 90);	
 	}
+	
 	@Test
 	public void GettingVehIDFromNewCar() throws VehicleException{
 	Car a = new Car("cad" , 90, false);	
 	assertTrue(a.getVehID() == "cad");
 	}
+	
 	@Test
 	public void FalseSmallCar() throws VehicleException{
 	Car a = new Car("cad" , 90, false);	
 	assertTrue(a.isSmall() == false);
 	}
+	
 	@Test
-	public void TestCarStateParked(){
+	public void TestCarStateParkedFalse() throws VehicleException{
+	this.c.enterParkedState(10, 20);
+	this.c.exitParkedState(30);
 	assertTrue(c.isParked() == false);
 	}
+	
 	@Test
-	public void TestCarStateQueued(){
+	public void TestCarStateParkedTrue() throws VehicleException {
+	this.c.enterParkedState(10, 20);
+	assertTrue(c.isParked() == true);
+	}
+	
+	@Test
+	public void TestCarStateQueuedFalse() throws VehicleException{
+	this.c.enterQueuedState();
+	this.c.exitQueuedState(100);
+	this.c.enterParkedState(100, 20);
 	assertTrue(c.isQueued() == false);
 	}
+	
+	@Test
+	public void TestCarStateQueuedTrue() throws VehicleException{
+	this.c.enterQueuedState();
+	assertTrue(c.isQueued() == true);
+	}
+	
 	@Test
 	public void TestCarVehIDTenLetter() throws VehicleException{
 	Car f = new Car("abcdefghij" , 80, false);
 	assertTrue(f.getVehID() == "abcdefghij");		
 	}
+	
 	@Test (expected = VehicleException.class)
 	public void TestNegativeTime() throws VehicleException{
-	Car k = new Car("kji" , -10, false);
-	
-		
+	Car k = new Car("kji" , -10, false);		
 	}
-	//KEEP FOR CARPARK TESTS
+	
 	@Test
 	public void TestCarLateArrivalTime() throws VehicleException{
 	Car l = new Car("lat" , 1050, false);	
 	assertTrue(l.getArrivalTime() == 1050);
-		
 	}
 	
-	
+	@Test
+	public void TestParkingTime() throws SimulationException, VehicleException{
+		Car i = new Car("kmn", 200, false);
+		Car o = new Car("okm", 200, false);
+		i.enterParkedState(80, 60);
+		o.enterParkedState(80, 60);
+		assertTrue(i.getParkingTime() == 80);	
+	}
+	@Test
+	public void TestIsSatisfiedTrue() throws VehicleException{
+		Car u = new Car("old", 100, false);
+		u.enterParkedState(100, 20);
+		u.exitParkedState(120);
+		assertTrue(u.isSatisfied() == true);
+	}
+	@Test
+	public void TestIsSatisfiedFalse() throws VehicleException{
+		Car u = new Car("old", 100, false);
+		u.enterQueuedState();
+		assertTrue(u.isSatisfied() == false);
+	}
+	@Test
+	public void TestGetDepartureTime() throws VehicleException{
+		Car u = new Car("old", 100, false);
+		u.enterParkedState(100, 20);
+		u.exitParkedState(120);
+		assertTrue(u.getDepartureTime() == 120);
+		
+		
+		
+	}
 	
 	
 }
