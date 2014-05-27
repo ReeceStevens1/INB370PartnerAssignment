@@ -45,11 +45,6 @@ public class MotorCycleTests {
 
 	
 	@Test
-	public void testToString() {
-		fail("Not yet implemented"); // TODO
-	}
-	
-	@Test
 	public void VehIDTest(){
 		assertTrue(m.getVehID() == "bac");
 		
