@@ -46,7 +46,7 @@ public class GUISimulator extends JFrame implements Runnable {
         JTabbedPane pane = new JTabbedPane();
         JPanel panel1 = new JPanel();
         panel1.add(new JLabel("Tab 1"));
-        JPanel panel2 = new JPanel(new GridLayout(5,1));
+        JPanel panel2 = new JPanel(new GridLayout(14,2));
         panel2.add(MaxCarSpacesLbl);
         panel2.add(MaxCarSpaces);
         panel2.add(MaxSmallCarSpacesLbl);
@@ -58,15 +58,10 @@ public class GUISimulator extends JFrame implements Runnable {
         panel2.add(startBtn);
         
         startBtn.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-        	MaxCarSpaces.getText();
-        
-        }
-        }
-        
-        
-        
-        
+            public void actionPerformed(ActionEvent e) {
+               redPanel.setBackground(Color.RED);
+            }
+         });        
 
         pane.add("Chart View", panel1);
         pane.add("Text View", panel2);

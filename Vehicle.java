@@ -94,9 +94,9 @@ public abstract class Vehicle {
 			throw new VehicleException("The vehicle's stay is not long enough");
 		}
 		else {
+			this.parked = true;
 			this.intendedDuration = intendedDuration;
 			this.parkingTime = parkingTime;
-			this.parked = true;
 		}
 		
 	}
@@ -123,8 +123,12 @@ public abstract class Vehicle {
 	 * 		  state or if the revised departureTime < parkingTime
 	 */
 	public void exitParkedState(int departureTime) throws VehicleException {
-		if ((this.isParked() == false) || (this.isQueued() == true)) {
-			throw new VehicleException("The vehicle is either parked or is queued to be parked.");
+		
+		if (this.isParked() == false)  {
+			throw new VehicleException("The vehicle isn't parked");
+		}
+		else if (this.isQueued() == true) {
+			throw new VehicleException("The vehicle is queued!");
 		}
 		else if (departureTime < getParkingTime()) {
 			throw new VehicleException("The parking time or departure time is wrong");
