@@ -77,8 +77,9 @@ public class SimulationRunner {
 	/**
 	 * Main program for the simulation 
 	 * @param args Arguments to the simulation 
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		CarPark cp = new CarPark();
 		Simulator s = null;
 		Log l = null; 
@@ -90,9 +91,19 @@ public class SimulationRunner {
 			System.exit(-1);
 		}
 		if (args.length < 14) {
-			System.out.println();
+			System.out.println(Constants.DEFAULT_SEED);
+			System.out.println(Constants.DEFAULT_CAR_PROB);
+			System.out.println(Constants.DEFAULT_SMALL_CAR_PROB);
+			System.out.println(Constants.DEFAULT_MOTORCYCLE_PROB);
+			System.out.println(Constants.DEFAULT_INTENDED_STAY_MEAN);
+			System.out.println(Constants.DEFAULT_INTENDED_STAY_SD);
+			System.out.println(Constants.DEFAULT_MAX_CAR_SPACES);
+			System.out.println(Constants.DEFAULT_MAX_SMALL_CAR_SPACES);
+			System.out.println(Constants.DEFAULT_MAX_MOTORCYCLE_SPACES);
+			System.out.println(Constants.DEFAULT_MAX_QUEUE_SIZE);
 		}
 		else {
+			GUISimulator.main(args);
 			for(String str:args) {
 				System.out.println(str);
 			}
@@ -104,7 +115,8 @@ public class SimulationRunner {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
-		} 
+		}
+		
 		
 	} 
 
