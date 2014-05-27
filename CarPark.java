@@ -42,10 +42,11 @@ public class CarPark {
 	 * CarPark constructor sets the basic size parameters. 
 	 * Uses default parameters
 	 */
-	
+	//Creates the public and private variables needed for car park.
 	public CarPark c;
 	private int maxCarSpaces, maxSmallCarSpaces, maxMotorCycleSpaces, maxQueueSize;
 	private int count;
+	//All lists have been created as ArrayLists
 	public ArrayList<Vehicle> spaces;
 	public ArrayList<Vehicle> queue;
 	public ArrayList<Vehicle> past;
@@ -87,6 +88,7 @@ public class CarPark {
 	 */
 	//@Author - Reece Stevens
 	public void archiveDepartingVehicles(int time,boolean force) throws VehicleException, SimulationException {
+		//If force is true then the entire car park is cleared
 		if(force){
 			for(int i = 0; i < this.spaces.size(); i++) {
 				Vehicle thisVehicle = this.spaces.get(i);
@@ -99,13 +101,14 @@ public class CarPark {
 				}
 			}
 		}
+		//else it will check if the vehicle is ready to depart yet, and then will archive it
 		else {
 			for(int i = 0; i < this.spaces.size(); i++) {
 				Vehicle thisVehicle = this.spaces.get(i);
 				if (!thisVehicle.isParked()){
 					throw new VehicleException("The vehicle is not in the right state to be archived");
 				}
-				else if (thisVehicle.getDepartureTime() + thisVehicle.getArrivalTime() == time) {
+				else if (thisVehicle.getDepartureTime() == time) {
 					this.past.add(thisVehicle);
 					this.unparkVehicle(thisVehicle, time);
 				}
@@ -139,7 +142,8 @@ public class CarPark {
 	 */
 	//@Author - Reece Stevens
 	public void archiveQueueFailures(int time) throws VehicleException {
-			for (int i = 0; i <queue.size(); i++) {
+		//Check if the current queue time is greater than the max queue time archive the vehicle and set them to dis-satisfied
+		for (int i = 0; i <queue.size(); i++) {
 			Vehicle thisVehicle = queue.get(i);
 			if ((time-(thisVehicle.getArrivalTime())) >= Constants.MAXIMUM_QUEUE_TIME) {
 				this.numDissatisfied++;
@@ -226,7 +230,6 @@ public class CarPark {
 	 * All spaces and queue positions should be empty and so we dump the archive
 	 * @return String containing dump of final carpark state 
 	 */
-	//@Author - James Church
 	public String finalState() {
 		String str = "Vehicles Processed: count:" + 
 				this.count + ", logged: " + this.past.size() 
@@ -301,7 +304,6 @@ public class CarPark {
 	 * 262::276::P:91::C:84::S:14::M:7::D:48::A:176::Q:9CCCCCCCCC|C:P>A||C:Q>P||S:N>P|
 	 * @return String containing current state 
 	 */
-	//@Author - James Church
 	public String getStatus(int time) {
 		String str = time +"::"
 		+ this.count + "::" 
@@ -333,7 +335,6 @@ public class CarPark {
 	 * Mainly concerned with parameters. 
 	 * @return String containing dump of initial carpark state 
 	 */
-	//@Author - James Church
 	public String initialState() {
 		return "CarPark [maxCarSpaces: " + this.maxCarSpaces
 				+ " maxSmallCarSpaces: " + this.maxSmallCarSpaces 
@@ -388,6 +389,7 @@ public class CarPark {
 	 */
 	//@Author - James Church
 	public void processQueue(int time, Simulator sim) throws VehicleException, SimulationException {
+		//Processes the queue to park any cars that can be parked and stopping after it can no longer get anymore cars in
 		for(int i=0;i<queue.size();i++) {
 			Vehicle v = queue.get(i);
 			if(!spacesAvailable(v)) {
@@ -439,6 +441,8 @@ public class CarPark {
 	 */
 	//@Author - Reece Stevens
 	public boolean spacesAvailable(Vehicle v) {
+		//Checks if there is a space for the instance of vehicle.
+		//Checks the car park's size first then if its a car, then a small car, then a motorbike.
 		if (this.carParkFull() == true) {
 			return false;
 		}
@@ -472,9 +476,7 @@ public class CarPark {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	//We didn't know what to do here...
 	@Override
 	public String toString() {
 		return null;
@@ -489,6 +491,7 @@ public class CarPark {
 	 */
 	//@Author - James Church
 	public void tryProcessNewVehicles(int time,Simulator sim) throws VehicleException, SimulationException {
+		//Tries to create a new car then either parks, queues or archives that vehicle.
 			if (sim.newCarTrial()) {
 				count++;
 				Car c = new Car("C"+this.count , time, false);
@@ -556,7 +559,6 @@ public class CarPark {
 	 * @param target String holding finishing state of vehicle (Q,P,A) 
 	 * @return String containing transition in the form: |(S|C|M):(N|Q|P|A)>(Q|P|A)| 
 	 */
-	//@Author - James Church
 	private String setVehicleMsg(Vehicle v,String source, String target) {
 		String str="";
 		if (v instanceof Car) {
