@@ -19,6 +19,7 @@ import org.junit.Test;
 import asgn2Exceptions.SimulationException;
 import asgn2Exceptions.VehicleException;
 import asgn2Vehicles.Car;
+import asgn2Vehicles.Vehicle;
 
 
 /**
@@ -37,6 +38,8 @@ public class CarTests {
 	public void setUp() throws Exception {
 	Car c = new Car("abc" , 80, true);	
 	this.c = c;	
+
+	
 	}
 
 	/**
@@ -118,6 +121,12 @@ public class CarTests {
 	Car f = new Car("abcdefghij" , 80, false);
 	assertTrue(f.getVehID() == "abcdefghij");		
 	}
+	@Test (expected = VehicleException.class)
+	public void TestNegativeTime() throws VehicleException{
+	Car k = new Car("kji" , -10, false);
+	
+		
+	}
 	//KEEP FOR CARPARK TESTS
 	@Test
 	public void TestCarLateArrivalTime() throws VehicleException{
@@ -125,5 +134,8 @@ public class CarTests {
 	assertTrue(l.getArrivalTime() == 1050);
 		
 	}
+	
+	
+	
 	
 }
